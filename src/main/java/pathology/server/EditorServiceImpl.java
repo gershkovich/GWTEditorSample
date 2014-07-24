@@ -44,6 +44,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
                 if ( node.nodeName().equalsIgnoreCase("#text") )
                 {
                     printNode(printInstructions, node);
+                    //test
                 }
             }
 
