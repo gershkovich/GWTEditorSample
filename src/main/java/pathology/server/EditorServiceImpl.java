@@ -8,6 +8,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
+import org.jsoup.select.NodeVisitor;
 import pathology.PrintInstruction;
 import pathology.client.EditorService;
 
@@ -25,6 +26,17 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
         // System.out.println(rtf);
 
         Document doc = Jsoup.parseBodyFragment(rtf);
+
+
+        doc.traverse(new NodeVisitor() {
+            public void head(Node node, int depth) {
+                System.out.println("Entering tag: " + node.nodeName());
+            }
+            public void tail(Node node, int depth) {
+                System.out.println("Exiting tag: " + node.nodeName());
+            }
+        });
+
 
         System.out.println("HTML:" + doc.html());
 
