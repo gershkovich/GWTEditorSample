@@ -1,19 +1,25 @@
-body {
-    background-color: white;
-    color: black;
-    font-family: Arial, sans-serif;
-    font-size: small;
-    margin: 8px;
+
+.splitLayoutPanel .gwt-SplitLayoutPanel-HDragger {
+    background: #e7e7e7 url(images/thumb_vertical.png) center center no-repeat;
+    cursor: col-resize;
 }
+
+.splitLayoutPanel .gwt-SplitLayoutPanel-VDragger {
+    background: #e7e7e7 url(images/thumb_horz.png) center center no-repeat;
+    cursor: row-resize;
+}
+
 
 .button_italic   {
     font-style: italic;
 
 }
 
+/*.gwt-TextArea  {*/
+    /*resize: both;*/
+/*}*/
 
-.gwt-RichTextArea {
-}
+
 .hasRichTextToolbar {
     border: 0px;
 }
@@ -82,10 +88,11 @@ body {
 .gwt-ToggleButton-down-hovering,
 .gwt-ToggleButton-down-disabled {
     margin: 0;
-    text-decoration: firebrick;
+    font-weight: lighter;
     background: url("images/hborder.png") repeat-x 0px -27px;
     -moz-border-radius: 2px;
     border-radius: 2px;
+    text-align: center;
 }
 .gwt-ToggleButton-up,
 .gwt-ToggleButton-up-hovering,
@@ -146,3 +153,40 @@ body {
     border: thin solid gray;
 
 }
+
+
+.cw-RichText {
+    border: 1px solid #BBBBBB;
+    border-spacing: 0px;
+
+
+
+}
+
+.cell-rta {
+    width: 100%;
+    height: 100%;
+
+
+}
+
+.toggle_bt {
+
+    text-align: center;
+
+}
+
+.title_label {
+
+    font: 'DejaVu Sans Mono', monospace;
+    text-decoration-color: steelblue;
+
+}
+
+.abs-panel {
+
+    overflow-x: hidden;
+    overflow-y: hidden;
+
+}
+

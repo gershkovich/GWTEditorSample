@@ -26,9 +26,9 @@ import java.util.List;
 public class EditorServiceImpl extends RemoteServiceServlet implements EditorService
 {
 
-    public String submitRTF(String rtf)
+    public String submitRTA(String rtaText)
     {
-        String dc = filterHTML(rtf);
+        String dc = filterHTML(rtaText);
 
         System.out.println("HTML: \n" + dc);
 
@@ -80,9 +80,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
                 } else if (foundText && ("img".equalsIgnoreCase(node.nodeName())))
                 {
 
-
                     dc.append(node.toString());
-
                 }
             }
             public void tail(Node node, int depth) {
@@ -102,17 +100,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
         });
 
         return dc.toString();
-    }
-
-    private void printNode(ArrayList<PrintInstruction> printInstructions, Node node)
-    {
-
-        PrintInstruction printInstruction = new PrintInstruction();
-
-        printInstruction.setText(node.toString());
-
-        printInstructions.add(printInstruction);
-
     }
 
     public static String convertHTMLtoRTF(String finalText)

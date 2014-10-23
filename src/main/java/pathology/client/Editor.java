@@ -1,15 +1,17 @@
 package pathology.client;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.dom.client.*;
+import com.google.gwt.i18n.client.Constants;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
+import pathology.client.rta.RichTextAreaImproved;
+import pathology.client.rta.RichTextToolbar;
+import pathology.client.rta.RichTextToolbarMin;
+
+import java.util.Iterator;
 
 /**
  * Created by pg86 on 7/24/14.
@@ -17,151 +19,81 @@ import com.google.gwt.user.client.ui.*;
 public class Editor implements EntryPoint
 {
 
+
     public void onModuleLoad()
     {
+        SplitLayoutPanel splitLayoutPanel = new SplitLayoutPanel(3);
 
-        final RichTextArea rta = new RichTextArea();
+        splitLayoutPanel.ensureDebugId("cwSplitLayoutPanel");
 
-        rta.addStyleName("rta_style");
-
-        // Get formatters - will be null if not available
-
-
-        final RichTextArea.Formatter rtaFormatter = rta.getFormatter();
-
-        RichTextToolbar toolbar = new RichTextToolbar(rta);
-
-        // Main container panel
-        VerticalPanel panel = new VerticalPanel();
-        panel.addStyleName("rta_style");
-
-
-        // Add the RichTextArea
-        panel.add(rta);
-        panel.setCellWidth(rta, "100%");
-        rta.setWidth("100%");
-
-        // Create a button box and add it to the main panel
-        HorizontalPanel buttons = new HorizontalPanel();
-        panel.add(toolbar);
-        panel.setCellWidth(buttons, "100%");
-
-        panel.add(buttons);
-
-        // A simple button to show the text - anything can do this
-        buttons.add(new Button("Show Text", new ClickHandler()
+       final SplitLayoutPanel splitLayoutPanel2 = new SplitLayoutPanel(3)
         {
+            @Override
+            public void onResize() {
+                super.onResize();
 
-            public void onClick(ClickEvent event)
-            {
+                int sz = this.getSplitterSize();
 
-                Window.alert(rta.getText());
+                if (this.getWidgetCount() > 0)
+                {
+                    Iterator<Widget>  iter =  this.getChildren().iterator();
+
+                    while (iter.hasNext())
+                    {
+                        Widget w = iter.next();
+                        if (w instanceof AbsolutePanel)
+                        {
+                            AbsolutePanel ap = ( AbsolutePanel )w;
+                            int h = ap.getElement().getAbsoluteBottom() - ap.getElement().getAbsoluteTop();
+
+                            RichTextAreaImproved rta = ( RichTextAreaImproved ) ap.getWidget(0);
+
+                            rta.getElement().getStyle().setHeight(h-20, Style.Unit.PX);
+
+                        }
+
+                    }
+
+
+
+
+
+
+
+                }
+
             }
-        }));
+        };
 
-        // A simple button to show the HTML - anything can do this, too
-        buttons.add(new Button("Show HTML", new ClickHandler()
-        {
+        splitLayoutPanel.addStyleName("splitLayoutPanel");
 
-            public void onClick(ClickEvent event)
-            {
-
-                Window.alert(rta.getHTML());
-            }
-        }));
-
-        // A button to toggle 'bold' - BasicFormatters and above - note that the
-        // button won't be shown if the browser can't do this so no checking is
-        // required when the button is pressed
-        if ( rtaFormatter != null )
-        {
-            buttons.add(new Button("b", new ClickHandler()
-            {
-
-                public void onClick(ClickEvent event)
-                {
-
-                    rtaFormatter.toggleBold();
-                }
-            }));
-        }
-
-        if ( rtaFormatter != null )
-        {
-            Button italic = new Button("i", new ClickHandler()
-            {
-
-                public void onClick(ClickEvent event)
-                {
-
-                    rtaFormatter.toggleItalic();
-                }
-            });
-
-            italic.setStyleName("button_italic");
-
-            buttons.add(italic);
-        }
+        splitLayoutPanel.getElement().getStyle()
+                .setProperty("border", "3px solid #e7e7e7");
 
 
-        if ( rtaFormatter != null )
-        {
-            buttons.add(new Button("Font Large", new ClickHandler()
-            {
+        int winHeight = Window.getClientHeight();
 
-                public void onClick(ClickEvent event)
-                {
+        int winWidth = Window.getClientWidth();
 
-                    rtaFormatter.setFontSize(RichTextArea.FontSize.LARGE);
-                }
-            }));
-        }
+        splitLayoutPanel.addWest(splitLayoutPanel2, winWidth/2);
 
-        if ( rtaFormatter != null )
-        {
-            buttons.add(new Button("Font med", new ClickHandler()
-            {
+        splitLayoutPanel2.addStyleName("splitLayoutPanel");
+        splitLayoutPanel2.getElement().getStyle()
+                .setProperty("border", "3px solid #e7e7e7");
 
-                public void onClick(ClickEvent event)
-                {
+        splitLayoutPanel2.addSouth(makeRtaBlock("South 1"), winHeight/10);
 
-                    rtaFormatter.setFontSize(RichTextArea.FontSize.MEDIUM);
-                }
-            }));
-        }
+        splitLayoutPanel2.addSouth(makeRtaBlock("South 2"), winHeight/10);
 
-        if ( rtaFormatter != null )
-        {
-            buttons.add(new Button("Font Small", new ClickHandler()
-            {
+        splitLayoutPanel.addNorth(new HTML("list"), winWidth/5);
 
-                public void onClick(ClickEvent event)
-                {
+        splitLayoutPanel.add(new HTML("details"));
 
-                    rtaFormatter.setFontSize(RichTextArea.FontSize.SMALL);
-                }
-            }));
-        }
+        splitLayoutPanel2.addSouth(makeRtaBlock("Gene"), winHeight/10);
 
+        Button button = new Button("Submit");
 
-        // A button to toggle 'bold' - ExtendedFormatters only - note that the
-        // button won't be shown if the browser can't do this so no checking is
-        // required when the button is pressed
-        if ( rtaFormatter != null )
-        {
-            buttons.add(new Button("Add Rule", new ClickHandler()
-            {
-
-                public void onClick(ClickEvent event)
-                {
-
-                    rtaFormatter.insertHorizontalRule();
-                }
-            }));
-        }
-
-
-        buttons.add(new Button("Remove Format", new ClickHandler()
+        button.addClickHandler(new ClickHandler()
         {
 
             public void onClick(ClickEvent event)
@@ -169,25 +101,108 @@ public class Editor implements EntryPoint
                 //                 if (rtaFormatter != null)
                 //                rtaFormatter.removeFormat(); //todo here we can make sure the formatting is set for the entire content
 
-                EditorService.App.getInstance().submitRTF(rta.getHTML(), new SubmitRichTextAsyncCallback(rta));
+                // EditorService.App.getInstance().submitRTA(rta.getHTML(), new SubmitRichTextAsyncCallback(rta));
             }
-        }));
+        });
 
 
-        rta.addKeyUpHandler(new KeyUpHandler()
+        RootLayoutPanel rp = RootLayoutPanel.get();
+        rp.add(splitLayoutPanel);
+
+    }
+
+    private Widget makeRtaBlock(String title)
+    {
+        final RichTextAreaImproved rta = new RichTextAreaImproved();
+
+        rta.setWidth("100%");
+
+
+        int winHeight = Window.getClientHeight();
+
+       rta.setHeight((winHeight/10)-25 + "px");
+
+       // rta.setHeight("80%");
+
+
+
+        rta.setStyleName("gwt-TextArea");
+        rta.addStyleName("rta_style");
+
+       final RichTextToolbarMin toolbar = new RichTextToolbarMin(rta, title);
+
+       final AbsolutePanel absolutePanel = new AbsolutePanel();
+
+
+
+        absolutePanel.setStyleName("abs-panel");
+
+
+
+        absolutePanel.add(rta,0,20);
+
+
+
+
+        absolutePanel.add(toolbar,0,0);
+
+
+
+        rta.addScrollHandler(new ScrollHandler()
         {
 
             @Override
-            public void onKeyUp(KeyUpEvent event)
+            public void onScroll(ScrollEvent event)
             {
+                absolutePanel.remove(toolbar);
+                absolutePanel.add(toolbar,0,0);
+            }
+        });
 
-                rta.getHTML();
+        rta.addFocusHandler(new FocusHandler()
+        {
+            @Override
+            public void onFocus(FocusEvent event)
+            {
+               toolbar.setVisible(true);
 
             }
         });
 
 
-        RootPanel.get().add(panel);
+        rta.addBlurHandler(new BlurHandler()
+        {
+
+
+            @Override
+            public void onBlur(BlurEvent event)
+            {
+                toolbar.setVisible(true);
+            }
+        });
+
+
+
+        absolutePanel.setWidth("100%");
+
+        absolutePanel.setHeight("100%");
+
+
+
+
+//        Grid grid = new Grid(2, 1);
+//        grid.setStyleName("cw-RichText");
+//        grid.setWidget(0, 0, toolbar);
+//        grid.setWidget(1, 0, rta);
+
+
+//        grid.setWidth("100%");
+//        grid.setHeight("100%");
+//
+//        grid.getCellFormatter().setStyleName(1, 0, "cell-rta");
+
+
+        return absolutePanel;
     }
 
 
@@ -210,6 +225,7 @@ public class Editor implements EntryPoint
 
         public void onSuccess(String result)
         {
+
             if ( result != null )
             {
                 rta.setHTML(result);

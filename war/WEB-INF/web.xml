@@ -6,11 +6,15 @@
            version="3.0">
 
     <servlet>
-        <servlet-name>pathology.Editor EditorService</servlet-name>
+        <servlet-name>EditorService</servlet-name>
         <servlet-class>pathology.server.EditorServiceImpl</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>pathology.Editor EditorService</servlet-name>
-        <url-pattern>/pathology.Editor/EditorService</url-pattern>
+        <servlet-name>EditorService</servlet-name>
+        <url-pattern>/Editor/EditorService</url-pattern>
     </servlet-mapping>
+
+    <welcome-file-list>
+        <welcome-file>Editor.html</welcome-file>
+    </welcome-file-list>
 </web-app>

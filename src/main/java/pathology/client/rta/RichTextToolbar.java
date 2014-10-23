@@ -1,4 +1,4 @@
-package pathology.client;
+package pathology.client.rta;
 
 
 import com.google.gwt.core.client.GWT;
@@ -383,7 +383,7 @@ public class RichTextToolbar extends Composite
 
         initWidget(outer);
         setStyleName("gwt-RichTextToolbar");
-        richText.addStyleName("hasRichTextToolbar");
+        //richText.addStyleName("hasRichTextToolbar");
 
         if ( formatter != null )
         {

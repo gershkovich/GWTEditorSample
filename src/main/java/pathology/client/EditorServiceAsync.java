@@ -8,5 +8,5 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface EditorServiceAsync
 {
 
-    void submitRTF(String html, AsyncCallback<String> submitRichTextAsyncCallback);
+    void submitRTA(String html, AsyncCallback<String> submitRichTextAsyncCallback);
 }

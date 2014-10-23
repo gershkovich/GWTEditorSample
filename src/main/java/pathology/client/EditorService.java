@@ -11,7 +11,7 @@ import com.google.gwt.core.client.GWT;
 public interface EditorService extends RemoteService
 {
 
-    String submitRTF(String html);
+    String submitRTA(String html);
 
     /**
      * Utility/Convenience class.
