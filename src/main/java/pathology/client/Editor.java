@@ -22,6 +22,8 @@ public class Editor implements EntryPoint
 
     public void onModuleLoad()
     {
+
+
         SplitLayoutPanel splitLayoutPanel = new SplitLayoutPanel(3);
 
         splitLayoutPanel.ensureDebugId("cwSplitLayoutPanel");
@@ -204,6 +206,9 @@ public class Editor implements EntryPoint
 
         return absolutePanel;
     }
+
+
+
 
 
     private class SubmitRichTextAsyncCallback implements AsyncCallback<String>

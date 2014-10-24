@@ -96,6 +96,8 @@ public class RichTextToolbarMin extends Composite
 
     private PushButton removeFormat;
 
+    private PushButton symbols;
+
 
     /**
      * Creates a new toolbar that drives the given rich text area.
@@ -141,6 +143,91 @@ public class RichTextToolbarMin extends Composite
             richText.addKeyUpHandler(handler);
             richText.addClickHandler(handler);
         }
+
+
+        //add symbols handling
+
+        final DialogBox dialogBox = createDialogBox();
+        dialogBox.setGlassEnabled(true);
+        dialogBox.setAnimationEnabled(true);
+
+
+        // Create a button to show the dialog Box
+        Button openButton = new Button(
+                "&zeta;", new ClickHandler() {
+            public void onClick(ClickEvent sender) {
+
+                int i = topPanel.getElement().getAbsoluteTop();
+
+                dialogBox.setPopupPosition(300, i - 100);
+                dialogBox.show();
+            }
+        });
+
+        topPanel.add(openButton);
+
+    }
+
+
+    private DialogBox createDialogBox() {
+        // Create a dialog box and set the caption text
+        final DialogBox dialogBox = new DialogBox();
+        dialogBox.ensureDebugId("cwDialogBox");
+        dialogBox.setText("Special Symbols");
+
+        // Create a table to layout the content
+        VerticalPanel dialogContents = new VerticalPanel();
+        dialogContents.setSpacing(4);
+        dialogBox.setWidget(dialogContents);
+        Grid symbolGrid = makeSymbolGrid();
+
+
+        dialogContents.add(symbolGrid);
+        dialogContents.setCellHorizontalAlignment(
+                symbolGrid, HasHorizontalAlignment.ALIGN_CENTER);
+
+
+        // Add a close button at the bottom of the dialog
+        Button closeButton = new Button(
+                "close", new ClickHandler() {
+            public void onClick(ClickEvent event) {
+                dialogBox.hide();
+            }
+        });
+        dialogContents.add(closeButton);
+
+
+        // Return the dialog box
+        return dialogBox;
+    }
+
+    private Grid makeSymbolGrid()
+    {
+
+        // Add some text to the top of the dialog
+
+
+                Grid grid = new Grid(2, 1);
+                grid.setStyleName("cw-RichText");
+//                grid.setWidget(0, 0, toolbar);
+//                grid.setWidget(1, 0, rta);
+
+
+                grid.setWidth("100%");
+                grid.setHeight("100%");
+
+                grid.getCellFormatter().setStyleName(1, 0, "cell-rta");
+
+//        details.addClickHandler(new ClickHandler()
+//        {
+//
+//            @Override
+//            public void onClick(ClickEvent event)
+//            {
+//                richText.setHTML(richText.getHTML() + " &gamma;");
+//            }
+//        });
+        return grid;
     }
 
 
