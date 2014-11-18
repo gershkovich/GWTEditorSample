@@ -204,30 +204,51 @@ public class RichTextToolbarMin extends Composite
     private Grid makeSymbolGrid()
     {
 
-        // Add some text to the top of the dialog
+                final String [] greekLetters = {"Alpha","Beta","Gamma","Delta","Epsilon","Zeta","Eta","Theta","Iota","Kappa","Lambda","Mu","Nu","Xi","Omicron","Pi","Rho","Sigma","Tau","Upsilon","Phi","Chi","Psi","Omega"} ;
 
-
-                Grid grid = new Grid(2, 1);
+                Grid grid = new Grid(1, 24);
                 grid.setStyleName("cw-RichText");
-//                grid.setWidget(0, 0, toolbar);
-//                grid.setWidget(1, 0, rta);
-
 
                 grid.setWidth("100%");
                 grid.setHeight("100%");
 
-                grid.getCellFormatter().setStyleName(1, 0, "cell-rta");
+                int pos = 0;
 
-//        details.addClickHandler(new ClickHandler()
-//        {
-//
-//            @Override
-//            public void onClick(ClickEvent event)
-//            {
-//                richText.setHTML(richText.getHTML() + " &gamma;");
-//            }
-//        });
+                for (int i = 0; i < 1; i++)
+                {
+                    for (int j = 0; j < 24; j++)
+                    {
+                        pos = addSymbolPushButtons(greekLetters, grid, pos, i, j);
+
+                    }
+
+                }
+
+               // grid.getCellFormatter().setStyleName(1, 0, "cell-rta");
+
         return grid;
+    }
+
+    private int addSymbolPushButtons(String[] greekLetters, Grid grid, int pos, int i, int j)
+    {
+
+        final PushButton hp = new PushButton();
+
+        final String letterName = greekLetters[pos++];
+
+        hp.setText(letterName.substring(0, 1));
+
+        hp.addClickHandler(new ClickHandler()
+        {
+            @Override
+            public void onClick(ClickEvent event)
+            {
+                richText.setHTML(richText.getHTML() + " &" + letterName + ";" );
+            }
+        });
+
+        grid.setWidget(i, j, hp);
+        return pos;
     }
 
 
