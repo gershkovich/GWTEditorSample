@@ -48,15 +48,15 @@ public class TestLoadArchitypes
 
     String vtProt = "<i>Variant type (protein):</i>";
 
-
     String protDomain = "<i>Protein domain affected:</i>";
-
 
     String protFunction = "";
 
     String protFunction1 = "<i>Function of protein:</i>";
 
     String protFunction2 = "<i>Function of normal protein:</i>";
+
+    String protFunction3 = "<i>Function of normal protein</i>";
 
 
     String protPredEffect = "";
@@ -67,11 +67,25 @@ public class TestLoadArchitypes
 
     String protPredEffect3 = "<i>Predicted effects on</i><i>protein structure/function:</i>";
 
+    String protPredEffect4 = "<i>Predicted effects of variant</i><i>onprotein structure/function:</i>";
+    String protPredEffect5 = "<i>Predicted effects on</i><i>protein</i><i>structure/function:</i>";
+
+    String protPredEffect6 = "Predicted effects on<i>protein</i><i>structure/function:</i>";
+                             //"<i>Predicted effects on</i><i>protein</i><i>structure/function:</i>"
+
+
 
 
     //<i>Predicted effects of variant</i><i>on protein structure/function:</i>
 
-    String previouslyReported = "<i>Variant previously reported?</i>";
+    String previouslyReported = "";
+    String previouslyReported1 = "<i>Variant previously reported?</i>";
+    String previouslyReported2 = "<i>Variant previously reported:</i>";
+    String previouslyReported3 = "<i>Previously reported:</i>";
+    String previouslyReported4 = "<i>Previously reported?</i>";
+
+
+
 
     String addNotes = "<i>Additional notes:</i>";
 
@@ -82,7 +96,7 @@ public class TestLoadArchitypes
         String line;
         try
         {
-            File input = new File("/Users/pg86/Documents/Projects/Molecular Genetics/Library of Variant Descriptions11-08-14KEF.htm");
+            File input = new File("/Users/petergershkovich/Downloads/LibraryVariant.htm");
 
             Document doc = Jsoup.parse(input, "x-MacRoman", "");
 
@@ -162,6 +176,7 @@ Additional notes:
                 int fNormIdx = filtered.indexOf(fNorm);
 
                 int vtDNAIdx = filtered.indexOf(vtDNA);
+
                 int vtProtIdx = filtered.indexOf(vtProt);
 
                 int protDomainIdx = filtered.indexOf(protDomain);
@@ -176,6 +191,14 @@ Additional notes:
                     protFunction = protFunction2;
 
                 }
+
+                if ( protFunctionIdx < 1 )
+                {
+                    protFunctionIdx = filtered.indexOf(protFunction3);
+                    protFunction = protFunction3;
+
+                }
+
 
 
                 int protPredEffectIdx = filtered.indexOf(protPredEffect1);
@@ -196,12 +219,49 @@ Additional notes:
 
                 }
 
+                if ( protPredEffectIdx < 1 )
+                {
+                    protPredEffectIdx = filtered.indexOf(protPredEffect4);
+                    protPredEffect = protPredEffect4;
 
+                }
+                if ( protPredEffectIdx < 1 )
+                {
+                    protPredEffectIdx = filtered.indexOf(protPredEffect5);
+                    protPredEffect = protPredEffect5;
 
+                }
 
+                if ( protPredEffectIdx < 1 )
+                {
+                    protPredEffectIdx = filtered.indexOf(protPredEffect6);
+                    protPredEffect = protPredEffect6;
 
+                }
 
-                int previouslyReportedIdx = filtered.indexOf(previouslyReported);
+                int previouslyReportedIdx = filtered.indexOf(previouslyReported1);
+
+                previouslyReported = previouslyReported1;
+
+                if (previouslyReportedIdx < 1)
+                {
+
+                    previouslyReportedIdx = filtered.indexOf(previouslyReported2);
+                    previouslyReported = previouslyReported2;
+                }
+                if (previouslyReportedIdx < 1)
+                {
+
+                    previouslyReportedIdx = filtered.indexOf(previouslyReported3);
+                    previouslyReported = previouslyReported3;
+                }
+                if (previouslyReportedIdx < 1)
+                {
+
+                    previouslyReportedIdx = filtered.indexOf(previouslyReported4);
+                    previouslyReported = previouslyReported4;
+                }
+
 
                 if ( geneNameIdx < 1 )
                 {
@@ -241,6 +301,9 @@ Additional notes:
                     if ( cdnaIdx > 0 )
                     {
                         setChromPos(annotation, filtered, chromPosIdx, cdnaIdx);
+                    } else
+                    {
+                        System.out.println("CHR. POS \t" + filtered);
                     }
 
                 }
@@ -250,6 +313,9 @@ Additional notes:
                     if ( protIdx > 0 )
                     {
                         setCdnaPos(annotation, filtered, cdnaIdx, protIdx);
+                    } else
+                    {
+                        System.out.println("CDNA \t" + filtered);
                     }
 
                 }
@@ -257,26 +323,30 @@ Additional notes:
 
                 if ( protIdx > 0 )
                 {
-                    if ( fTumIdx > 0 )
+                    if (fTumIdx > 0)
                     {
                         setProtPos(annotation, filtered, protIdx, fTumIdx);
-                    }
-                    else if ( fNormIdx > 0 )
+                    } else if (fNormIdx > 0)
                     {
                         setProtPos(annotation, filtered, protIdx, fNormIdx);
-                    }
-                    else if ( vtDNAIdx > 0 )
+
+                    } else if (vtDNAIdx > 0 && protIdx < vtDNAIdx )
                     {
                         setProtPos(annotation, filtered, protIdx, vtDNAIdx);
+                    } else
+                    {
+                        System.out.println("PROT \t" + filtered);
                     }
                 }
-
 
                 if ( vtDNAIdx > 0 )
                 {
                     if ( vtProtIdx > 0 )
                     {
                         setVarTypeDNA(annotation, filtered, vtDNAIdx, vtProtIdx);
+                    } else
+                    {
+                        System.out.println("TYPE DNA \t" + filtered);
                     }
 
                 }
@@ -286,10 +356,14 @@ Additional notes:
                     if ( protDomainIdx > 0 )
                     {
                         setVarTypeProt(annotation, filtered, vtProtIdx, protDomainIdx);
+
+                    }  else  if ( protFunctionIdx > 0 )
+                    {
+                        setVarTypeProt(annotation, filtered, vtProtIdx, protFunctionIdx);
                     }
                     else
                     {
-                        System.out.println("NOT FOUND \t" + filtered);
+                        System.out.println("TYPE PROT \t" + filtered);
                     }
 
                 }
@@ -299,10 +373,13 @@ Additional notes:
                     if ( protFunctionIdx > 0 && protDomainIdx < protFunctionIdx )
                     {
                         setProtDomain(annotation, filtered, protDomainIdx, protFunctionIdx);
+                    }  else  if ( protPredEffectIdx > 0 && protDomainIdx < protPredEffectIdx )
+                    {
+                        setProtDomain(annotation, filtered, protDomainIdx, protPredEffectIdx);
                     }
                     else
                     {
-                        System.out.println("NOT FOUND \t" + filtered);
+                        System.out.println("PROT DOMAIN \t" + filtered);
                     }
 
                 }
@@ -314,9 +391,17 @@ Additional notes:
                     {
                         setProtFunction(annotation, filtered, protFunctionIdx, protPredEffectIdx);
                     }
+                    else if ( previouslyReportedIdx > 0 && protFunctionIdx < previouslyReportedIdx )
+                    {
+                        setProtFunction(annotation, filtered, protFunctionIdx, previouslyReportedIdx);
+                    }
+                    else if ( addNotesIdx > 0 && protFunctionIdx < addNotesIdx )
+                    {
+                        setProtFunction(annotation, filtered, protFunctionIdx, addNotesIdx);
+                    }
                     else
                     {
-                        System.out.println("NOT FOUND \t" + filtered);
+                        System.out.println("PROT. FUNCTION  \t" + filtered);
                     }
 
                 }
@@ -330,11 +415,26 @@ Additional notes:
                     }
                     else
                     {
-                        System.out.println("NOT FOUND \t" + filtered);
+                        System.out.println("PREDICTED EFFECT  \t" + filtered);
                     }
 
                 }
 
+                if ( previouslyReportedIdx > 0 )
+                {
+                    if ( addNotesIdx > 0 && previouslyReportedIdx < addNotesIdx )
+                    {
+                        setPreviouslyReported(annotation, filtered, previouslyReportedIdx, addNotesIdx);
+                    } else if ( addNotesIdx < 0)
+                    {
+                        setPreviouslyReported(annotation, filtered, previouslyReportedIdx, filtered.length());
+                    }
+                    else
+                    {
+                        System.out.println("PREVIOUSLY REPORTED  \t" + filtered);
+                    }
+
+                }
 
 
 
@@ -377,10 +477,17 @@ Additional notes:
             }
 
 
-        } catch ( IOException e )
+        } catch ( IOException e)
         {
             e.printStackTrace();
         }
+
+    }
+
+    private void setPreviouslyReported(Annotation annotation, String filtered, int idx1, int idx2)
+    {
+        annotation.setPreviouslyReported(filtered.substring(idx1 + previouslyReported.length(), idx2)
+                .replaceAll("(\\s+|\\xA0+)", " "));
 
     }
 
@@ -394,15 +501,14 @@ Additional notes:
     private void setProtFunction(Annotation annotation, String filtered, int idx1, int idx2)
     {
 
-        annotation.setFunctionOfNormalProtein(filtered.substring(idx1 + protFunction.length(), idx2).replaceAll("<(\\w|/\\w)>", "")
+        annotation.setFunctionOfNormalProtein(filtered.substring(idx1 + protFunction.length(), idx2)
                 .replaceAll("(\\s+|\\xA0+)", " "));
     }
-
 
     private void setProtDomain(Annotation annotation, String filtered, int idx1, int idx2)
     {
 
-        annotation.setProteinDomainAffected(filtered.substring(idx1 + protDomain.length(), idx2).replaceAll("<(\\w|/\\w)>", "")
+        annotation.setProteinDomainAffected(filtered.substring(idx1 + protDomain.length(), idx2)
                 .replaceAll("(\\s+|\\xA0+)", " "));
     }
 
@@ -411,7 +517,6 @@ Additional notes:
 
         annotation.setVariantTypeProtein(filtered.substring(idx1 + vtProt.length(), idx2).replaceAll("<(\\w|/\\w)>", "")
                 .replaceAll("(\\s+|\\xA0+)", " "));
-
 
     }
 

@@ -19,7 +19,7 @@ public class Annotation
     private String proteinDomainAffected;
     private String predictedEffect;
     private String functionOfNormalProtein;
-
+    private String previouslyReported;
     private String additionalNotes;
 
     public String getGeneSymbol()
@@ -152,6 +152,16 @@ public class Annotation
         this.additionalNotes = additionalNotes;
     }
 
+    public String getPreviouslyReported()
+    {
+        return previouslyReported;
+    }
+
+    public void setPreviouslyReported(String previouslyReported)
+    {
+        this.previouslyReported = previouslyReported;
+    }
+
     public String toString()
     {
         if ( StringUtils.isNotEmpty(getVariantTypeProtein()))
@@ -165,6 +175,8 @@ public class Annotation
                 + "\t VT Prot: " + getVariantTypeProtein()
                 + "\t  Func: " + getFunctionOfNormalProtein()
                 + "\t  Eff: " + getPredictedEffect()
+                + "\t  Reported: " + getPreviouslyReported()
+
                 + "\t" +  getAdditionalNotes();
     }
 }
