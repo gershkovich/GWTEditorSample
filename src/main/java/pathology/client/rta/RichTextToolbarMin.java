@@ -236,14 +236,14 @@ public class RichTextToolbarMin extends Composite
 
         final String letterName = greekLetters[pos++];
 
-        hp.setText(letterName.substring(0, 1));
+        hp.setHTML(richText.getHTML() + " &" + letterName.toLowerCase() + ";");
 
         hp.addClickHandler(new ClickHandler()
         {
             @Override
             public void onClick(ClickEvent event)
             {
-                richText.setHTML(richText.getHTML() + " &" + letterName + ";" );
+                richText.setHTML(richText.getHTML() + " &" + letterName.toLowerCase() + ";" );
             }
         });
 
