@@ -1,5 +1,7 @@
 package pathology.model;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Created by petergershkovich on 2/7/15.
  */
@@ -152,6 +154,17 @@ public class Annotation
 
     public String toString()
     {
-        return getGeneSymbol() + "\t" + getGeneDescription() + "\t" + getAdditionalNotes();
+        if ( StringUtils.isNotEmpty(getVariantTypeProtein()))
+        {
+            String f = getVariantTypeProtein();
+        }
+
+        return getGeneSymbol() + "\t" + getGeneDescription() + "\t" + getChrom() + ":" + getPos() + "\t"
+                + getCdna() + "\t" + getProteinShortPos() + "\t" + getProteinLongPos() + "\t"
+                + "\tVT DNA: " + getVariantTypeDna()
+                + "\t VT Prot: " + getVariantTypeProtein()
+                + "\t  Func: " + getFunctionOfNormalProtein()
+                + "\t  Eff: " + getPredictedEffect()
+                + "\t" +  getAdditionalNotes();
     }
 }

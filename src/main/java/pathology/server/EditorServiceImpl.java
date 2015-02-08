@@ -52,9 +52,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
         Document doc = Jsoup.parseBodyFragment(htmlString);
 
-
-
-
         doc.traverse(new NodeVisitor() {
             boolean foundText = false;
 
