@@ -472,8 +472,11 @@ Additional notes:
 
             for ( Annotation an : annotations )
             {
-
-                System.out.println(an.toString());
+                if (StringUtils.isEmpty(an.getProteinShortPos()))
+                {
+                    System.out.println("----------------------------");
+                System.out.println(an.getGeneSymbol() + "\t" + an.getProteinShortPos() + "\t" + an.getAdditionalNotes());
+            }
             }
 
 
@@ -742,8 +745,6 @@ Additional notes:
                     dc.append(node.nodeName());
                     dc.append(">");
                 }
-
-
             }
         });
 
